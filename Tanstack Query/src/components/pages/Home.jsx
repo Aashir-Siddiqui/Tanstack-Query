@@ -1,28 +1,12 @@
 import React from 'react';
-import { PostApi } from '../../api/PostApi';
-import { useQuery } from '@tanstack/react-query';
 
 export default function Home() {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['posts'],
-    queryFn: PostApi,
-  });
-
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
-
-  return (
-      <ul>
-        {data?.map((currElement) => {
-          const { id, userId, title, body } = currElement;
-          return (
-            <li key={id}>
-              <p>User ID: {userId}</p>
-              <h1>{title}</h1>
-              <p>{body}</p>
-            </li>
-          );
-        })}
-      </ul>
-  );
+    return (
+        <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
+            <h1 className="text-4xl font-bold text-gray-800 mb-4">Tanstack Practice</h1>
+            <p className="text-lg text-gray-600 max-w-2xl text-center">
+                Explore posts and data fetched using React Query. Navigate to FetchRQ to see the latest posts!
+            </p>
+        </div>
+    );
 }
