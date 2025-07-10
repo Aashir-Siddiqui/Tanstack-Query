@@ -38,7 +38,7 @@ export default function FetchPage() {
                 </li>
             </ul>
             <NavLink to="/rq">
-            <button className='bg-green-600 border-none outline-none px-8 py-4 rounded-md'>Go Posts</button>
+                <button className='bg-green-600 border-none outline-none px-8 py-4 rounded-md'>Go Posts</button>
             </NavLink>
         </div>
     )
