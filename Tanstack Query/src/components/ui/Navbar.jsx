@@ -20,6 +20,14 @@ export default function Navbar() {
             >
                 FetchRQ
             </NavLink>
+            <NavLink
+                to="/infinite"
+                className={({ isActive }) =>
+                    `px-4 py-2 rounded hover:bg-gray-800 transition-colors ${isActive ? 'bg-gray-700' : ''}`
+                }
+            >
+                InfiniteScroll
+            </NavLink>
         </nav>
     );
 }
