@@ -1,7 +1,7 @@
 // FetchRQ.jsx
 import React, { useState } from 'react';
-import { PostApi } from '../../api/PostApi';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { delPost, PostApi, updatePost } from '../../api/PostApi';
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { NavLink } from 'react-router-dom';
 
 export default function FetchRQ() {
@@ -17,6 +17,28 @@ export default function FetchRQ() {
         // refetchInterval: 2000,
         // refetchIntervalInBackground: true,
     });
+
+    const querClient =  useQueryClient()
+
+    const deleteMutation = useMutation({
+        mutationFn: (id) => delPost(id),
+        onSuccess: (data, id) => {
+            querClient.setQueryData(['posts', pageNumber], (currElem) => {
+                return currElem?.filter((post) => post.id !== id) 
+            })
+        }
+    })
+
+    const updateMutation = useMutation({
+        mutationFn: (id) => updatePost(id),
+        onSuccess: (apiData, postId) => {
+            querClient.setQueryData(['posts', pageNumber], (postsData) => {
+                return postsData?.map((currPost) => {
+                    return currPost.id === postId ? {...currPost, title: apiData.data.title} : currPost
+                }) 
+            })
+        }
+    })
 
     if (isLoading)
         return (
@@ -47,6 +69,8 @@ export default function FetchRQ() {
                                 <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
                                 <p className="text-gray-600 mt-2">{body}</p>
                             </NavLink>
+                            <button className='bg-green-600 border-none outline-none px-6 py-3 rounded-md cursor-pointer' onClick={() => deleteMutation.mutate(id)}>Delete</button>
+                            <button className='bg-green-600 border-none outline-none px-6 py-3 rounded-md cursor-pointer' onClick={() => updateMutation.mutate(id)}>Update</button>
                         </li>
                     );
                 })}
